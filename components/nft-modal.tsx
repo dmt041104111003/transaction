@@ -51,7 +51,7 @@ export function NFTModal({ isOpen, onClose, nftData }: NFTModalProps) {
 
           {nftData.transaction && (
             <div className="space-y-4">
-              <h3 className="text-base font-semibold">Mint Transaction</h3>
+              <h3 className="text-base font-medium text-gray-700">Mint Transaction</h3>
 
               <div className="space-y-2">
                 <h4 className="text-sm font-medium text-gray-500">Transaction Hash:</h4>
@@ -80,27 +80,22 @@ export function NFTModal({ isOpen, onClose, nftData }: NFTModalProps) {
 
           {nftData.metadata && (
             <div className="space-y-2">
-              <h3 className="text-sm font-medium text-gray-500">Metadata (CIP-721)</h3>
-              <pre className="p-3 bg-gray-50 rounded-md text-xs font-mono overflow-x-auto select-all">
+              <h3 className="text-base font-medium text-gray-700">Metadata (CIP-721)</h3>
+              <pre className="p-3 bg-gray-50 rounded-md text-xs font-mono overflow-x-auto select-all whitespace-pre-wrap">
                 {JSON.stringify(nftData.metadata, null, 2)}
               </pre>
             </div>
           )}
         </div>
 
-        <DialogFooter className="p-4 bg-gray-50 border-t">
+        <DialogFooter className="p-4 bg-gray-50 border-t flex justify-between">
+          <Button className="bg-blue-600 hover:bg-blue-700" onClick={() => window.open(nftData.explorerUrl, "_blank")}>
+            <ExternalLink className="mr-2 h-4 w-4" />
+            View on Explorer
+          </Button>
           <Button variant="outline" onClick={onClose}>
             Close
           </Button>
-          {nftData.explorerUrl && (
-            <Button
-              className="bg-blue-600 hover:bg-blue-700"
-              onClick={() => window.open(nftData.explorerUrl, "_blank")}
-            >
-              <ExternalLink className="mr-2 h-4 w-4" />
-              View on Explorer
-            </Button>
-          )}
         </DialogFooter>
       </DialogContent>
     </Dialog>
