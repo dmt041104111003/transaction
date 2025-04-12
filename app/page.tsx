@@ -10,15 +10,13 @@ export default function HomePage() {
         Welcome to Lms - Cardano
       </h1>
       <div className="w-full max-w-3xl border-t-4 border-teal-500 mb-12"></div>
-        <p className="text-lg mb-8">
-          @byDaoManhTung: Official website verify certificate of LMS courses - Cardano
-        </p>
+      
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link href="/verify">
-            <Button className="w-full py-6 text-lg bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600" size="lg">Verify</Button>
+            <Button size="lg">Verify</Button>
           </Link>
           <Link href="#">
-            <Button className="w-full py-6 text-lg bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600" variant="outline" size="lg">
+            <Button variant="outline" size="lg">
               LMS - Cardano
             </Button>
           </Link>

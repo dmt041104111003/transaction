@@ -117,7 +117,7 @@ export default function VerifyPage() {
   }
 
   return (
-    <div className="container mx-auto py-10 px-4">
+    <div className="min-h-screen bg-[#e8f7f1] flex flex-col items-center py-10 px-4">
       <Link href="/">
         <Button variant="ghost" className="mb-6">
           <ArrowLeft className="mr-2 h-4 w-4" />
@@ -266,7 +266,7 @@ export default function VerifyPage() {
           </CardContent>
           {!loading && nftData && (
             <CardFooter className="flex justify-between">
-              <Button className="w-full py-6 text-lg bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600" variant="outline" onClick={() => window.print()}>
+              <Button  variant="outline" onClick={() => window.print()}>
                 Print information
               </Button>
               <a
@@ -274,7 +274,7 @@ export default function VerifyPage() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Button className="w-full py-6 text-lg bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600" variant="outline">
+                <Button className="flex items-center gap-2">
                   View on Explorer
                   <ExternalLink className="h-4 w-4" />
                 </Button>
