@@ -118,7 +118,7 @@ export default function VerifyPage() {
   return (
     <div className="min-h-screen bg-[#e8f7f1] flex flex-col items-center py-10 px-4">
       <Link href="/">
-        <Button variant="ghost" className="mb-6">
+        <Button variant="ghost" >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Return to home page
         </Button>
@@ -265,7 +265,7 @@ export default function VerifyPage() {
           </CardContent>
           {!loading && nftData && (
             <CardFooter className="flex justify-between">
-              <Button className="bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600"  onClick={() => window.print()}>
+              <Button className="w-full py-4 text-lg bg-gradient-to-r from-[#00b894] to-[#0984e3] text-white rounded-lg hover:opacity-90 disabled:bg-gray-400 disabled:hover:opacity-100 transition-all font-medium flex items-center justify-center shadow-md"  onClick={() => window.print()}>
                 Print information
               </Button>
               <a
@@ -273,7 +273,7 @@ export default function VerifyPage() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Button className="flex items-center gap-2 bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600">
+                <Button className="w-full py-4 text-lg bg-gradient-to-r from-[#00b894] to-[#0984e3] text-white rounded-lg hover:opacity-90 disabled:bg-gray-400 disabled:hover:opacity-100 transition-all font-medium flex items-center justify-center shadow-md">
                   View on Explorer
                   <ExternalLink/>
                 </Button>

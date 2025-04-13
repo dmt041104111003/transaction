@@ -13,10 +13,10 @@ export default function HomePage() {
       
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link href="/verify">
-            <Button className="bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600" size="lg">Verify</Button>
+            <Button className="w-full py-4 text-lg bg-gradient-to-r from-[#00b894] to-[#0984e3] text-white rounded-lg hover:opacity-90 disabled:bg-gray-400 disabled:hover:opacity-100 transition-all font-medium flex items-center justify-center shadow-md" size="lg">Verify</Button>
           </Link>
           <Link href="#">
-            <Button className="bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600" size="lg">
+            <Button className="w-full py-4 text-lg bg-gradient-to-r from-[#00b894] to-[#0984e3] text-white rounded-lg hover:opacity-90 disabled:bg-gray-400 disabled:hover:opacity-100 transition-all font-medium flex items-center justify-center shadow-md" size="lg">
               LMS - Cardano
             </Button>
           </Link>
