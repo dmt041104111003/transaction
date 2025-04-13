@@ -7,9 +7,8 @@ import { ThemeProvider } from "@/components/theme-provider"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Cardano NFT Certificate Verification",
-  description: "Verify blockchain certificates on Cardano",
-    generator: 'v0.dev'
+  title: "LMS | Cardano",
+  description: "LMS - Verify",
 }
 
 export default function RootLayout({
