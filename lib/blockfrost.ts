@@ -6,53 +6,45 @@ import axios from "axios"
 const BLOCKFROST_API_KEY = "preprodwAoQrS3Nc0RhHqm8awt9yISNlW9Z6TW6"
 const BLOCKFROST_URL = "https://cardano-preprod.blockfrost.io/api/v0"
 
+const blockfrostClient = axios.create({
+  baseURL: BLOCKFROST_URL,
+  headers: {
+    'project_id': BLOCKFROST_API_KEY,
+  }
+})
+
 export async function getAssetDetails(policyId: string, assetName: string) {
   try {
-    const response = await axios.get(`${BLOCKFROST_URL}/assets/${policyId}${assetName}`, {
-      headers: {
-        project_id: BLOCKFROST_API_KEY,
-      },
-    })
+    const response = await blockfrostClient.get(`/assets/${policyId}${assetName}`)
     return response.data
-  } catch (error) {
-    console.error("Error fetching asset details:", error)
-    throw new Error("Không thể lấy thông tin tài sản từ blockchain")
+  } catch (error: any) {
+    console.error("Error fetching asset details:", error.response?.data || error.message)
+    throw new Error("Unable to get asset information from blockchain")
   }
 }
 
 export async function getTransactionDetails(txHash: string) {
   try {
-    const response = await axios.get(`${BLOCKFROST_URL}/txs/${txHash}`, {
-      headers: {
-        project_id: BLOCKFROST_API_KEY,
-      },
-    })
+    const response = await blockfrostClient.get(`/txs/${txHash}`)
     return response.data
-  } catch (error) {
-    console.error("Error fetching transaction details:", error)
+  } catch (error: any) {
+    console.error("Error fetching transaction details:", error.response?.data || error.message)
     throw new Error("Không thể lấy thông tin giao dịch từ blockchain")
   }
 }
 
 export async function getTransactionMetadata(txHash: string) {
   try {
-    const response = await axios.get(`${BLOCKFROST_URL}/txs/${txHash}/metadata`, {
-      headers: {
-        project_id: BLOCKFROST_API_KEY,
-      },
-    })
+    const response = await blockfrostClient.get(`/txs/${txHash}/metadata`)
     return response.data
-  } catch (error) {
-    console.error("Error fetching transaction metadata:", error)
+  } catch (error: any) {
+    console.error("Error fetching transaction metadata:", error.response?.data || error.message)
     throw new Error("Không thể lấy metadata từ blockchain")
   }
 }
 
 export async function getNftInfo(policyId: string, txHash: string) {
   try {
-    // Trong môi trường thực tế, bạn sẽ gọi các API thực tế ở đây
-    // Đây chỉ là mô phỏng để hiển thị dữ liệu mẫu
-
     // Lấy thông tin giao dịch
     const txDetails = await getTransactionDetails(txHash)
 
@@ -60,14 +52,17 @@ export async function getNftInfo(policyId: string, txHash: string) {
     const metadata = await getTransactionMetadata(txHash)
 
     // Lấy danh sách tài sản trong policy
-    const assets = await axios.get(`${BLOCKFROST_URL}/assets/policy/${policyId}`, {
-      headers: {
-        project_id: BLOCKFROST_API_KEY,
-      },
-    })
+    const assets = await blockfrostClient.get(`/assets/policy/${policyId}`)
+    
+    if (!assets.data || assets.data.length === 0) {
+      throw new Error("Không tìm thấy tài sản cho policy ID đã cho")
+    }
 
     // Tìm asset đầu tiên trong policy (hoặc bạn có thể lọc theo assetName cụ thể)
-    const assetName = assets.data[0]?.asset_name || ""
+    const assetName = assets.data[0]?.asset_name
+    if (!assetName) {
+      throw new Error("Tên tài sản không tìm thấy trong policy")
+    }
 
     // Lấy chi tiết tài sản
     const assetDetails = await getAssetDetails(policyId, assetName)
@@ -87,8 +82,11 @@ export async function getNftInfo(policyId: string, txHash: string) {
         return acc
       }, {}),
     }
-  } catch (error) {
-    console.error("Error getting NFT info:", error)
-    throw new Error("Không thể lấy thông tin NFT")
+  } catch (error: any) {
+    console.error("Error getting NFT info:", error.response?.data || error.message)
+    if (error.response?.status === 404) {
+      throw new Error("NFT không tìm thấy. Vui lòng kiểm tra Policy ID và Transaction Hash")
+    }
+    throw new Error(error.message || "Không thể lấy thông tin NFT")
   }
 }

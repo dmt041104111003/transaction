@@ -42,11 +42,13 @@ export default function VerifyPage() {
     setError(null)
 
     try {
+      console.log('Fetching NFT data with:', { policy, hash })
       const response = await getNftInfo(policy, hash)
+      console.log('Response:', response)
       setNftData(response)
     } catch (err: any) {
-      console.error("Error fetching NFT data:", err)
-      setError(err.message || "Không thể lấy thông tin NFT. Vui lòng thử lại sau.")
+      console.error("Error details:", err)
+      setError(err.message || "Unable to get NFT information. Please try again later.")
     } finally {
       setLoading(false)
     }
