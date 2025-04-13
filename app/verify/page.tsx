@@ -508,10 +508,7 @@ export default function VerifyPage() {
                       <p className="font-mono text-xs break-all">{nftData.policyId}</p>
                     </div>
 
-                    {/* <div className="space-y-2">
-                      <h3 className="text-sm font-medium text-secondary">Asset Name</h3>
-                      <p>{nftData.assetName}</p>
-                    </div> */}
+   
 
                     <div className="space-y-2">
                       <h3 className="text-sm font-medium text-secondary">Course Title</h3>
@@ -537,7 +534,7 @@ export default function VerifyPage() {
                     <div className="space-y-4">
                       <div className="p-4 bg-accent rounded-md">
                         <pre className="text-xs overflow-auto whitespace-pre-wrap max-h-[400px]">
-                          {JSON.stringify(nftData.metadata, null, 2)}
+                          {JSON.stringify(nftData.metadata, null,1)}
                         </pre>
                       </div>
                     </div>
@@ -554,7 +551,6 @@ export default function VerifyPage() {
               </div>
             )}
           </CardContent>
-
           {nftData && (
             <CardFooter className="flex justify-between">
               <Button
