@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 // Blockfrost API key
-const BLOCKFROST_API_KEY = "preprodwAoQrS3Nc0RhHqm8awt9yISNlW9Z6TW6"
+const BLOCKFROST_API_KEY = "preprodgBQChgqjLnZendiQvG9r585WIkdyEUvM"
 const BLOCKFROST_BASE_URL = "https://cardano-preprod.blockfrost.io/api/v0"
 
 interface NFTData {
@@ -39,38 +39,47 @@ export default function VerifyPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [nftData, setNftData] = useState<NFTData | null>(null)
+  const [hasFetched, setHasFetched] = useState(false)
 
   // Form state for manual checking
   const [manualPolicyId, setManualPolicyId] = useState("")
   const [manualTxHash, setManualTxHash] = useState("")
 
   useEffect(() => {
-    // Check if we have parameters in the URL
-    if (policyId && txHash) {
-      // Store in session storage and remove from URL
-      sessionStorage.setItem("verifyPolicyId", policyId)
-      sessionStorage.setItem("verifyTxHash", txHash)
+    // Prevent double fetching
+    if (hasFetched || loading) return;
 
-      // Clean the URL by removing the query parameters
-      router.replace("/verify", { scroll: false })
+    const fetchData = async () => {
+      if (policyId && txHash) {
+        // Store in session storage and remove from URL
+        sessionStorage.setItem("verifyPolicyId", policyId)
+        sessionStorage.setItem("verifyTxHash", txHash)
 
-      // Fetch data with the parameters
-      fetchNFTData(policyId, txHash)
-    } else {
-      // Check if we have stored parameters
-      const storedPolicyId = sessionStorage.getItem("verifyPolicyId")
-      const storedTxHash = sessionStorage.getItem("verifyTxHash")
+        // Clean the URL by removing the query parameters
+        router.replace("/verify", { scroll: false })
 
-      if (storedPolicyId && storedTxHash) {
-        fetchNFTData(storedPolicyId, storedTxHash)
+        // Fetch data with the parameters
+        setHasFetched(true)
+        await fetchNFTData(policyId, txHash)
       } else {
-        // Reset state when no parameters are available
-        setNftData(null)
-        setError(null)
-        setLoading(false)
+        // Check if we have stored parameters
+        const storedPolicyId = sessionStorage.getItem("verifyPolicyId")
+        const storedTxHash = sessionStorage.getItem("verifyTxHash")
+
+        if (storedPolicyId && storedTxHash) {
+          setHasFetched(true)
+          await fetchNFTData(storedPolicyId, storedTxHash)
+        } else {
+          // Reset state when no parameters are available
+          setNftData(null)
+          setError(null)
+          setLoading(false)
+        }
       }
     }
-  }, [policyId, txHash, router])
+
+    fetchData()
+  }, [policyId, txHash, router, hasFetched, loading])
 
   const fetchNFTData = async (pId: string, tHash: string) => {
     if (!pId || !tHash) {
@@ -381,27 +390,13 @@ export default function VerifyPage() {
     return {
       ...basicData,
       assetName: assetKey,
-      courseTitle: assetData.name || assetKey,
-      metadata: { ...assetData, transaction_metadata: txMetadata },
-    }
-  }
-
-  const handleManualCheck = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (manualPolicyId && manualTxHash) {
-      // Store in session storage instead of URL
-      sessionStorage.setItem("verifyPolicyId", manualPolicyId)
-      sessionStorage.setItem("verifyTxHash", manualTxHash)
-
-      // Fetch data directly without changing URL
-      fetchNFTData(manualPolicyId, manualTxHash)
-    }
-  }
-
-  const formatAssetName = (hexName: string) => {
-    if (!hexName) return "Unknown"
-
     try {
+      const assetMetadataResponse = await fetch(`${BLOCKFROST_BASE_URL}/assets/${asset.asset}/metadata`, {
+        headers: {
+          project_id: BLOCKFROST_API_KEY,
+          "Content-Type": "application/json",
+        },
+      })
       // First check if it's actually hex
       if (/^[0-9A-Fa-f]+$/.test(hexName)) {
         return Buffer.from(hexName, "hex").toString()
