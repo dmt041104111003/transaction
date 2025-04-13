@@ -9,11 +9,14 @@ export default function HomePage() {
     <div className="container mx-auto py-10">
       <div className="max-w-3xl mx-auto text-center space-y-6">
         <h2 className="text-2xl font-bold tracking-tight gradient-text">Certificate Verification System</h2>
-  
+   
+
         <Card className="border-secondary/20">
           <CardHeader className="bg-accent rounded-t-lg">
-            <CardTitle className="text-secondary">Check verification</CardTitle>
-    
+            <CardTitle className="text-secondary">How It Works</CardTitle>
+            <CardDescription>
+              Our verification system allows you to confirm the authenticity of blockchain certificates
+            </CardDescription>
           </CardHeader>
           <CardContent className="pt-6">
             <div className="grid gap-6">

@@ -14,7 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 // Blockfrost API key
 const BLOCKFROST_API_KEY = "preprodwAoQrS3Nc0RhHqm8awt9yISNlW9Z6TW6"
-const BLOCKFROST_BASE_URL = "https://cardano-preprod.blockfrost.io/api/v0/"
+const BLOCKFROST_BASE_URL = "https://cardano-preprod.blockfrost.io/api/v0"
 
 interface NFTData {
   policyId: string
@@ -508,7 +508,10 @@ export default function VerifyPage() {
                       <p className="font-mono text-xs break-all">{nftData.policyId}</p>
                     </div>
 
-   
+                    <div className="space-y-2">
+                      <h3 className="text-sm font-medium text-secondary">Asset Name</h3>
+                      <p>{nftData.assetName}</p>
+                    </div>
 
                     <div className="space-y-2">
                       <h3 className="text-sm font-medium text-secondary">Course Title</h3>
@@ -534,7 +537,7 @@ export default function VerifyPage() {
                     <div className="space-y-4">
                       <div className="p-4 bg-accent rounded-md">
                         <pre className="text-xs overflow-auto whitespace-pre-wrap max-h-[400px]">
-                          {JSON.stringify(nftData.metadata, null,1)}
+                          {JSON.stringify(nftData.metadata, null, 2)}
                         </pre>
                       </div>
                     </div>
@@ -551,6 +554,7 @@ export default function VerifyPage() {
               </div>
             )}
           </CardContent>
+
           {nftData && (
             <CardFooter className="flex justify-between">
               <Button
