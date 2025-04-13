@@ -154,7 +154,7 @@ export default function VerifyPage() {
                   placeholder="Enter Transaction Hash"
                 />
               </div>
-              <Button type="submit" disabled={loading}>
+              <Button className="w-full py-4 text-lg bg-gradient-to-r from-[#00b894] to-[#0984e3] text-white rounded-lg hover:opacity-90 disabled:bg-gray-400 disabled:hover:opacity-100 transition-all font-medium flex items-center justify-center shadow-md" type="submit" disabled={loading}>
                 {loading ? "Verifying..." : "Verify"}
               </Button>
             </form>
