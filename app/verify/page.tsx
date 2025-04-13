@@ -14,6 +14,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { getNftInfo } from "@/lib/blockfrost"
 
 export default function VerifyPage() {
   const searchParams = useSearchParams()
@@ -41,8 +42,7 @@ export default function VerifyPage() {
     setError(null)
 
     try {
-  
-      const response = await simulateFetchNftData(policy, hash)
+      const response = await getNftInfo(policy, hash)
       setNftData(response)
     } catch (err: any) {
       console.error("Error fetching NFT data:", err)
@@ -69,72 +69,6 @@ export default function VerifyPage() {
 
   const formatDate = (timestamp: number) => {
     return new Date(timestamp).toLocaleString()
-  }
-
-  const simulateFetchNftData = async (policy: string, hash: string) => {
-    if (!process.env.NEXT_PUBLIC_BLOCKFROST_API_KEY) {
-      throw new Error('Blockfrost API key is not configured')
-    }
-
-    const blockfrostUrl = 'https://cardano-preprod.blockfrost.io/api/v0'
-    const headers = {
-      'project_id': 'preprodwAoQrS3Nc0RhHqm8awt9yISNlW9Z6TW6',
-      'Content-Type': 'application/json'
-    }
-
-    try {
-      // Get transaction details
-      const txResponse = await fetch(`${blockfrostUrl}/txs/${hash}`, { headers })
-      if (!txResponse.ok) throw new Error('Transaction not found')
-      const txData = await txResponse.json()
-
-      // Get transaction metadata
-      const metadataResponse = await fetch(`${blockfrostUrl}/txs/${hash}/metadata`, { headers })
-      if (!metadataResponse.ok) throw new Error('Metadata not found')
-      const metadataList = await metadataResponse.json()
-
-      // Find metadata label 721
-      const nftMetadata = metadataList.find(m => m.label === '721')
-      if (!nftMetadata) throw new Error('NFT metadata not found')
-
-      // Parse metadata
-      const metadata = JSON.parse(nftMetadata.json_metadata)
-      const policyData = metadata[policy]
-      if (!policyData) throw new Error('Policy not found in metadata')
-
-      const assetName = Object.keys(policyData)[0]
-      const assetData = policyData[assetName]
-
-      return {
-        policyId: policy,
-        assetName,
-        courseTitle: assetData.name,
-        mintTransaction: {
-          txHash: hash,
-          block: txData.block_height,
-          timestamp: txData.block_time,
-        },
-        metadata: {
-          '721': {
-            [policy]: {
-              [assetName]: assetData
-            }
-          }
-        },
-              recipient: {
-                name: "Anh Do",
-                address: "addr_test1...7wksl00fz2",
-              },
-              courseTitle: "query query",
-            },
-          },
-        },
-        name: "query query Certificate",
-        image: "bafkreib2xqvtrkgzsivinihbasxl5qghmswa3x7pjy4kzllkgs7pra6mde",
-        mediaType: "image/png",
-        description: "Course completion certificate",
-      },
-    }
   }
 
   return (
