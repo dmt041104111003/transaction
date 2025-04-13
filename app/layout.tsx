@@ -8,8 +8,8 @@ const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "LMS | Cardano",
-  description: "LMS - Verify",
-    generator: 'v0.dev'
+  description: "Verify",
+ 
 }
 
 export default function RootLayout({
