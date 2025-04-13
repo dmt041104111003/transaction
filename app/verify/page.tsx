@@ -41,8 +41,7 @@ export default function VerifyPage() {
     setError(null)
 
     try {
-      // Trong môi trường thực tế, bạn sẽ gọi API của mình ở đây
-      // Đây là mô phỏng để hiển thị dữ liệu mẫu
+  
       const response = await simulateFetchNftData(policy, hash)
       setNftData(response)
     } catch (err: any) {
@@ -58,7 +57,7 @@ export default function VerifyPage() {
     if (policyId && txHash) {
       fetchNftData(policyId, txHash)
     } else {
-      setError("Vui lòng nhập cả Policy ID và Transaction Hash")
+      setError("Please enter both Policy ID and Transaction Hash")
     }
   }
 
@@ -197,7 +196,7 @@ export default function VerifyPage() {
                           onClick={() => copyToClipboard(nftData.policyId, "policyId")}
                           className="h-6 px-2"
                         >
-                          {copied === "policyId" ? "Đã sao chép!" : <Copy className="h-4 w-4" />}
+                          {copied === "policyId" ? "Copied!" : <Copy className="h-4 w-4" />}
                         </Button>
                       </div>
                       <div className="bg-muted p-3 rounded-md font-mono text-sm break-all">{nftData.policyId}</div>
@@ -266,7 +265,7 @@ export default function VerifyPage() {
           </CardContent>
           {!loading && nftData && (
             <CardFooter className="flex justify-between">
-              <Button  variant="outline" onClick={() => window.print()}>
+              <Button className="bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600"  variant="outline" onClick={() => window.print()}>
                 Print information
               </Button>
               <a
@@ -274,7 +273,7 @@ export default function VerifyPage() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Button className="flex items-center gap-2">
+                <Button className="flex items-center gap-2 bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600">
                   View on Explorer
                   <ExternalLink className="h-4 w-4" />
                 </Button>
