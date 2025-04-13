@@ -16,7 +16,7 @@ export default function HomePage() {
             <Button className="bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600" size="lg">Verify</Button>
           </Link>
           <Link href="#">
-            <Button className="bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600" variant="outline" size="lg">
+            <Button className="bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600" size="lg">
               LMS - Cardano
             </Button>
           </Link>

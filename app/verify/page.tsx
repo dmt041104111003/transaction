@@ -265,7 +265,7 @@ export default function VerifyPage() {
           </CardContent>
           {!loading && nftData && (
             <CardFooter className="flex justify-between">
-              <Button className="bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600"  variant="outline" onClick={() => window.print()}>
+              <Button className="bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600"  onClick={() => window.print()}>
                 Print information
               </Button>
               <a
@@ -275,7 +275,7 @@ export default function VerifyPage() {
               >
                 <Button className="flex items-center gap-2 bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600">
                   View on Explorer
-                  <ExternalLink className="h-4 w-4" />
+                  <ExternalLink/>
                 </Button>
               </a>
             </CardFooter>
