@@ -71,34 +71,56 @@ export default function VerifyPage() {
     return new Date(timestamp).toLocaleString()
   }
 
-  // Hàm mô phỏng gọi API để hiển thị dữ liệu mẫu
   const simulateFetchNftData = async (policy: string, hash: string) => {
-    // Mô phỏng độ trễ mạng
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    if (!process.env.NEXT_PUBLIC_BLOCKFROST_API_KEY) {
+      throw new Error('Blockfrost API key is not configured')
+    }
 
-    // Trả về dữ liệu mẫu
-    return {
-      policyId: policy,
-      assetName: "3433343535323534356633363337363633373566373337353638366633303637",
-      courseTitle: "query query Certificate",
-      mintTransaction: {
-        txHash: hash,
-        block: 3364929,
-        timestamp: new Date("2025-04-10T13:15:47").getTime() / 1000,
-      },
-      metadata: {
-        "721": {
-          "8200581cd645df7e14033f88dd438e7dfc6aa9539dfa246bde4f9365b100a02a": {
-            CERT_67f7_suho0g: {
-              name: "query query Certificate",
-              image: "bafkreib2xqvtrkgzsivinihbasxl5qghmswa3x7pjy4kzllkgs7pra6mde",
-              issuer: {
-                name: "Kin So Go",
-                address: "addr_test1...54vsearhk6",
-              },
-              courseId: "67f761977487ee22a8189fa0",
-              issuedAt: "2025-04-10",
-              mediaType: "image/png",
+    const blockfrostUrl = 'https://cardano-preprod.blockfrost.io/api/v0'
+    const headers = {
+      'project_id': 'preprodwAoQrS3Nc0RhHqm8awt9yISNlW9Z6TW6',
+      'Content-Type': 'application/json'
+    }
+
+    try {
+      // Get transaction details
+      const txResponse = await fetch(`${blockfrostUrl}/txs/${hash}`, { headers })
+      if (!txResponse.ok) throw new Error('Transaction not found')
+      const txData = await txResponse.json()
+
+      // Get transaction metadata
+      const metadataResponse = await fetch(`${blockfrostUrl}/txs/${hash}/metadata`, { headers })
+      if (!metadataResponse.ok) throw new Error('Metadata not found')
+      const metadataList = await metadataResponse.json()
+
+      // Find metadata label 721
+      const nftMetadata = metadataList.find(m => m.label === '721')
+      if (!nftMetadata) throw new Error('NFT metadata not found')
+
+      // Parse metadata
+      const metadata = JSON.parse(nftMetadata.json_metadata)
+      const policyData = metadata[policy]
+      if (!policyData) throw new Error('Policy not found in metadata')
+
+      const assetName = Object.keys(policyData)[0]
+      const assetData = policyData[assetName]
+
+      return {
+        policyId: policy,
+        assetName,
+        courseTitle: assetData.name,
+        mintTransaction: {
+          txHash: hash,
+          block: txData.block_height,
+          timestamp: txData.block_time,
+        },
+        metadata: {
+          '721': {
+            [policy]: {
+              [assetName]: assetData
+            }
+          }
+        },
               recipient: {
                 name: "Anh Do",
                 address: "addr_test1...7wksl00fz2",
@@ -265,9 +287,7 @@ export default function VerifyPage() {
           </CardContent>
           {!loading && nftData && (
             <CardFooter className="flex justify-between">
-              <Button className="w-full py-4 text-lg bg-gradient-to-r from-[#00b894] to-[#0984e3] text-white rounded-lg hover:opacity-90 disabled:bg-gray-400 disabled:hover:opacity-100 transition-all font-medium flex items-center justify-center shadow-md"  onClick={() => window.print()}>
-                Print information
-              </Button>
+           
               <a
                 href={`https://preprod.cardanoscan.io/token/${nftData.policyId}${nftData.assetName}`}
                 target="_blank"
